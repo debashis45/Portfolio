@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debashis Ghosh — ETL Tester & Data Quality Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0A1628;
+    --navy-mid: #0F2040;
+    --navy-light: #1A3355;
+    --teal: #00C9A7;
+    --teal-dim: #00A589;
+    --teal-glow: rgba(0,201,167,0.12);
+    --teal-border: rgba(0,201,167,0.25);
+    --white: #FFFFFF;
+    --off-white: #F0F4F8;
+    --text-main: #E8EFF7;
+    --text-muted: #7A8FA6;
+    --text-soft: #B0C2D4;
+    --card-bg: #0D1E35;
+    --card-border: rgba(255,255,255,0.07);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--navy);
+    color: var(--text-main);
+    line-height: 1.7;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ─────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(10,22,40,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--card-border);
+    z-index: 100;
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-brand {
+    font-family: var(--font-display);
+    font-weight: 700; font-size: 1.1rem;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  .nav-brand span { color: var(--teal); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 0.875rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  /* ── LAYOUT ──────────────────────────── */
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 5rem 0; }
+  section:first-of-type { padding-top: 7rem; }
+
+  /* ── HERO ────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 0 2rem;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image:
+      linear-gradient(rgba(0,201,167,0.8) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,201,167,0.8) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-orb {
+    position: absolute; top: 10%; right: -5%;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,201,167,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--teal-glow);
+    border: 1px solid var(--teal-border);
+    border-radius: 100px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--teal); letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  h1 .teal { color: var(--teal); }
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 400; color: var(--text-soft);
+    margin-bottom: 1.5rem;
+  }
+  .hero-desc {
+    max-width: 600px; color: var(--text-muted);
+    font-size: 1rem; margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.7rem 1.5rem; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary {
+    background: var(--teal); color: var(--navy);
+  }
+  .btn-primary:hover { background: var(--teal-dim); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: var(--text-main);
+    border: 1px solid var(--card-border);
+  }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--card-border);
+    flex-wrap: wrap;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2rem; font-weight: 700; color: var(--teal);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+  /* ── SECTION HEADERS ─────────────────── */
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    color: var(--teal); text-transform: uppercase; margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700; letter-spacing: -0.02em;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .section-intro { color: var(--text-muted); max-width: 560px; line-height: 1.8; }
+
+  /* ── SKILLS ──────────────────────────── */
+  #skills { background: var(--navy-mid); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+  .skill-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .skill-card:hover { border-color: var(--teal-border); transform: translateY(-2px); }
+  .skill-card-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--teal-glow); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem; font-size: 1.2rem;
+  }
+  .skill-card h3 {
+    font-family: var(--font-display);
+    font-size: 1rem; font-weight: 600; color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    padding: 0.25rem 0.65rem; border-radius: 100px;
+    font-size: 0.75rem; font-weight: 500;
+    background: rgba(0,201,167,0.1); color: var(--teal);
+    border: 1px solid rgba(0,201,167,0.2);
+  }
+
+  /* ── EXPERIENCE ──────────────────────── */
+  .timeline { position: relative; margin-top: 3rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 16px; top: 0; bottom: 0;
+    width: 1px; background: var(--card-border);
+  }
+  .timeline-item { padding-left: 3.5rem; position: relative; margin-bottom: 2.5rem; }
+  .timeline-dot {
+    position: absolute; left: 8px; top: 4px;
+    width: 17px; height: 17px; border-radius: 50%;
+    background: var(--teal); border: 3px solid var(--navy);
+    box-shadow: 0 0 0 4px rgba(0,201,167,0.2);
+  }
+  .exp-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: border-color 0.2s;
+  }
+  .exp-card:hover { border-color: var(--teal-border); }
+  .exp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .exp-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--white); }
+  .exp-company { font-size: 0.875rem; color: var(--teal); font-weight: 500; margin-top: 0.15rem; }
+  .exp-date {
+    font-size: 0.78rem; color: var(--text-muted); font-weight: 500;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
+    padding: 0.2rem 0.6rem; border-radius: 100px; white-space: nowrap;
+  }
+  .exp-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.75; margin-top: 0.75rem; }
+  .exp-bullets { margin-top: 1rem; list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+  .exp-bullets li {
+    display: flex; gap: 0.6rem; align-items: flex-start;
+    font-size: 0.875rem; color: var(--text-soft); line-height: 1.65;
+  }
+  .exp-bullets li::before {
+    content: '▸'; color: var(--teal); flex-shrink: 0; margin-top: 0.05rem;
+  }
+  .project-badge {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--navy); background: var(--teal);
+    padding: 0.2rem 0.55rem; border-radius: 4px;
+    margin-bottom: 0.6rem;
+  }
+
+  /* ── CERTIFICATIONS ──────────────────── */
+  #certifications { background: var(--navy-mid); }
+  .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+  .cert-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .cert-card:hover { border-color: var(--teal-border); transform: translateY(-2px); }
+  .cert-icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, #0078D4, #004E8C);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+  .cert-name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; color: var(--white); line-height: 1.4; }
+  .cert-valid { font-size: 0.75rem; color: var(--text-muted); }
+  .cert-valid span { color: var(--teal); }
+
+  /* ── ACHIEVEMENTS ────────────────────── */
+  .achievements-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+  .achievement-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .achievement-card:hover { border-color: var(--teal-border); transform: translateY(-2px); }
+  .ach-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem; font-weight: 700; color: var(--teal);
+    line-height: 1;
+  }
+  .ach-label { font-size: 0.85rem; color: var(--text-soft); margin-top: 0.3rem; line-height: 1.5; }
+
+  /* ── EDUCATION ────────────────────────── */
+  #education { background: var(--navy-mid); }
+  .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+  .edu-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .edu-card:hover { border-color: var(--teal-border); }
+  .edu-degree { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+  .edu-school { font-size: 0.875rem; color: var(--teal); margin-bottom: 0.75rem; }
+  .edu-meta { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-muted); }
+  .edu-gpa { color: var(--teal); font-weight: 600; }
+
+  /* ── CONTACT ─────────────────────────── */
+  .contact-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 3rem;
+    text-align: center; margin-top: 3rem;
+  }
+  .contact-wrap h2 { margin-bottom: 0.75rem; }
+  .contact-wrap p { color: var(--text-muted); max-width: 480px; margin: 0 auto 2.5rem; }
+  .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.65rem 1.25rem; border-radius: 8px;
+    font-size: 0.875rem; font-weight: 500;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-soft); text-decoration: none;
+    transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── FOOTER ──────────────────────────── */
+  footer {
+    border-top: 1px solid var(--card-border);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.8rem; color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    nav .nav-links { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .contact-wrap { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">DG<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-content container">
+    <div class="hero-eyebrow">Available for opportunities</div>
+    <h1>Debashis<br><span class="teal">Ghosh</span></h1>
+    <p class="hero-subtitle">ETL Tester &amp; Data Quality Engineer</p>
+    <p class="hero-desc">
+      4+ years building and validating enterprise data pipelines in healthcare.
+      Specialist in Control-M automation, ETL testing, and incident resolution
+      — ensuring data accuracy at scale.
+    </p>
+    <div class="hero-ctas">
+      <a href="mailto:iamdeba.g@gmail.com" class="btn btn-primary">Get in touch</a>
+      <a href="#experience" class="btn btn-outline">View my work</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Years of experience</div>
+      </div>
+      <div>
+        <div class="stat-num">150+</div>
+        <div class="stat-label">Batch jobs migrated</div>
+      </div>
+      <div>
+        <div class="stat-num">98%</div>
+        <div class="stat-label">ETL test coverage achieved</div>
+      </div>
+      <div>
+        <div class="stat-num">4</div>
+        <div class="stat-label">Azure certifications</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">What I work with</p>
+    <h2>Technical skills</h2>
+    <p class="section-intro">A hands-on toolkit built across healthcare data engineering projects, focused on data quality and pipeline reliability.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-icon">🧪</div>
+        <h3>ETL Testing</h3>
+        <div class="skill-tags">
+          <span class="tag">ETL Testing</span>
+          <span class="tag">Data Validation</span>
+          <span class="tag">Test Case Design</span>
+          <span class="tag">UAT</span>
+          <span class="tag">Regression Testing</span>
+          <span class="tag">Defect Tracking</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">⚙️</div>
+        <h3>ETL &amp; Data Tools</h3>
+        <div class="skill-tags">
+          <span class="tag">Informatica PowerCenter</span>
+          <span class="tag">IBM Datastage</span>
+          <span class="tag">Control-M</span>
+          <span class="tag">Hive</span>
+          <span class="tag">Hadoop</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🗄️</div>
+        <h3>Databases &amp; Query</h3>
+        <div class="skill-tags">
+          <span class="tag">MySQL</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Squirrel SQL</span>
+          <span class="tag">Data Warehousing</span>
+          <span class="tag">CDC</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🔄</div>
+        <h3>Job Scheduling</h3>
+        <div class="skill-tags">
+          <span class="tag">Control-M</span>
+          <span class="tag">Batch Monitoring</span>
+          <span class="tag">Job Scheduling</span>
+          <span class="tag">Dependency Mapping</span>
+          <span class="tag">Workflow Automation</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🎫</div>
+        <h3>Incident Management</h3>
+        <div class="skill-tags">
+          <span class="tag">ServiceNow</span>
+          <span class="tag">Root Cause Analysis</span>
+          <span class="tag">Incident Analysis</span>
+          <span class="tag">SLA Adherence</span>
+          <span class="tag">Problem Management</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">☁️</div>
+        <h3>Cloud &amp; Platforms</h3>
+        <div class="skill-tags">
+          <span class="tag">Azure Data Factory</span>
+          <span class="tag">Azure Synapse</span>
+          <span class="tag">Azure SQL</span>
+          <span class="tag">Blob Storage</span>
+          <span class="tag">Agile / Scrum</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section id="experience">
+  <div class="container">
+    <p class="section-label">Career journey</p>
+    <h2>Work experience</h2>
+    <p class="section-intro">Enterprise-scale data projects in the healthcare industry, focusing on ETL quality and batch automation.</p>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-title">Associate — ETL Tester / Data Quality Engineer</div>
+              <div class="exp-company">Cognizant</div>
+            </div>
+            <div class="exp-date">May 2022 – Present</div>
+          </div>
+
+          <p class="exp-desc">Working across two large healthcare data projects, responsible for ETL pipeline validation, batch job monitoring, and incident resolution.</p>
+
+          <div style="margin-top:1.25rem;">
+            <div class="project-badge">PROJECT 01</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; color:var(--white); margin-bottom:0.5rem;">Healthcare Membership &amp; Claims Data Integration <span style="font-size:0.78rem; color:var(--text-muted); font-weight:400;">· 24 months</span></div>
+            <ul class="exp-bullets">
+              <li>Designed and executed 200+ test cases validating membership data loaded from 10+ heterogeneous source systems into a centralized data warehouse.</li>
+              <li>Validated CDC (Change Data Capture) feeds and batch feeds ensuring real-time synchronization accuracy for claims adjudication and membership validation.</li>
+              <li>Monitored Control-M batch jobs, configured dependencies and alerts to ensure zero-downtime processing and SLA compliance.</li>
+              <li>Led incident management using ServiceNow — performed RCA and coordinated resolutions, reducing MTTR by ~30%.</li>
+              <li>Executed data quality checks on Hive tables and HDFS data stores, identifying discrepancies across Informatica PowerCenter pipeline stages.</li>
+              <li>Automated repetitive SQL-based validation checks, cutting manual testing effort by ~25% per release cycle.</li>
+            </ul>
+          </div>
+
+          <div style="margin-top:1.5rem;">
+            <div class="project-badge">PROJECT 02</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; color:var(--white); margin-bottom:0.5rem;">Healthcare Job Scheduling Migration (Zena → Control-M) <span style="font-size:0.78rem; color:var(--text-muted); font-weight:400;">· 18 months</span></div>
+            <ul class="exp-bullets">
+              <li>Spearheaded migration of 150+ Zena jobs to Control-M — analyzed dependencies and re-engineered workflows with zero production incidents during cutover.</li>
+              <li>Designed 100+ test cases for regression, smoke, and functional testing of migrated workflows, achieving 98% test coverage.</li>
+              <li>Optimized migrated batch workflows, improving overall job execution efficiency by ~20%.</li>
+              <li>Validated ETL pipeline integrity post-migration by cross-verifying data outputs using SQL scripts against source system records.</li>
+              <li>Documented migration test results and sign-off artifacts for client acceptance, ensuring full traceability and audit compliance.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--navy-light); border-color: var(--teal); box-shadow: none;"></div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-title">Intern — ETL &amp; Data Testing</div>
+              <div class="exp-company">Cognizant</div>
+            </div>
+            <div class="exp-date">Nov 2021 – Apr 2022</div>
+          </div>
+          <ul class="exp-bullets" style="margin-top:0.75rem;">
+            <li>Assisted in ETL test case preparation and execution for data validation projects.</li>
+            <li>Gained hands-on exposure to SQL querying, data profiling, and defect tracking tools.</li>
+            <li>Supported senior testers in batch job monitoring and incident logging via ServiceNow.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CERTIFICATIONS ── -->
+<section id="certifications">
+  <div class="container">
+    <p class="section-label">Verified credentials</p>
+    <h2>Certifications</h2>
+    <p class="section-intro">Four Microsoft Azure certifications covering data engineering, AI, and cloud fundamentals.</p>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-icon">🏅</div>
+        <div class="cert-name">Azure Data Engineer Associate</div>
+        <div class="cert-valid">Valid until <span>December 2025</span></div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🤖</div>
+        <div class="cert-name">Azure AI Engineer Associate</div>
+        <div class="cert-valid">Valid until <span>2027</span></div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">☁️</div>
+        <div class="cert-name">Azure Fundamentals</div>
+        <div class="cert-valid"><span>AZ-900</span> · Passed</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">📊</div>
+        <div class="cert-name">Azure Data Fundamentals</div>
+        <div class="cert-valid"><span>DP-900</span> · Passed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACHIEVEMENTS ── -->
+<section id="achievements">
+  <div class="container">
+    <p class="section-label">Impact by numbers</p>
+    <h2>Key achievements</h2>
+    <p class="section-intro">Quantified outcomes from four years of data engineering and testing work.</p>
+    <div class="achievements-grid">
+      <div class="achievement-card">
+        <div class="ach-num">150+</div>
+        <div class="ach-label">Batch jobs successfully migrated from Zena to Control-M with zero production incidents</div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-num">~30%</div>
+        <div class="ach-label">Reduction in MTTR through structured incident management and RCA workflows in ServiceNow</div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-num">98%</div>
+        <div class="ach-label">ETL test coverage achieved on the Control-M migration project</div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-num">~25%</div>
+        <div class="ach-label">Manual testing effort saved per release cycle through SQL validation automation</div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-num">200+</div>
+        <div class="ach-label">Test cases designed and executed across enterprise healthcare ETL pipelines</div>
+      </div>
+      <div class="achievement-card">
+        <div class="ach-num">10+</div>
+        <div class="ach-label">Heterogeneous source systems validated for membership data warehouse integration</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EDUCATION ── -->
+<section id="education">
+  <div class="container">
+    <p class="section-label">Academic background</p>
+    <h2>Education</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div style="font-size:0.72rem; font-weight:600; letter-spacing:0.08em; color:var(--teal); margin-bottom:0.6rem;">POSTGRADUATE</div>
+        <div class="edu-degree">Master of Computer Applications (MCA)</div>
+        <div class="edu-school">University of Engineering &amp; Management, Kolkata</div>
+        <div class="edu-meta">
+          <span>2022</span>
+          <span class="edu-gpa">CGPA 9.7 / 10</span>
+        </div>
+      </div>
+      <div class="edu-card">
+        <div style="font-size:0.72rem; font-weight:600; letter-spacing:0.08em; color:var(--teal); margin-bottom:0.6rem;">UNDERGRADUATE</div>
+        <div class="edu-degree">Bachelor of Computer Applications (BCA)</div>
+        <div class="edu-school">Murshidabad College of Engineering &amp; Technology</div>
+        <div class="edu-meta">
+          <span>2019</span>
+          <span class="edu-gpa">CGPA 8.58 / 10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-wrap">
+      <p class="section-label" style="text-align:center;">Let's connect</p>
+      <h2>Open to new opportunities</h2>
+      <p>Whether you have an ETL testing role, a data quality challenge, or just want to talk pipelines — reach out.</p>
+      <div class="contact-links">
+        <a href="mailto:iamdeba.g@gmail.com" class="contact-link">
+          📧 iamdeba.g@gmail.com
+        </a>
+        <a href="tel:+917031088046" class="contact-link">
+          📱 +91 70310 88046
+        </a>
+        <a href="#" class="contact-link">
+          📍 Hyderabad, India
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Debashis Ghosh · ETL Tester &amp; Data Quality Engineer · Hyderabad, India</p>
+</footer>
+
+</body>
+</html>
